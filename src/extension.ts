@@ -3,6 +3,16 @@ import * as vscode from "vscode";
 export function activate(context: vscode.ExtensionContext) {
   const processedFiles = new Set<string>();
 
+  function getFormattingOptions(
+    doc: vscode.TextDocument
+  ): vscode.FormattingOptions {
+    const cfg = vscode.workspace.getConfiguration("editor", doc.uri);
+    return {
+      tabSize: cfg.get<number>("tabSize", 4),
+      insertSpaces: cfg.get<boolean>("insertSpaces", true),
+    };
+  }
+
   const formatAndSave = async (uri: vscode.Uri) => {
     if (processedFiles.has(uri.fsPath)) {
       return;
@@ -10,23 +20,19 @@ export function activate(context: vscode.ExtensionContext) {
     processedFiles.add(uri.fsPath);
 
     try {
-      const previouslyVisible = vscode.window.visibleTextEditors.some(
-        (editor) => editor.document.uri.fsPath === uri.fsPath
+      const document = await vscode.workspace.openTextDocument(uri);
+
+      const edits = await vscode.commands.executeCommand<vscode.TextEdit[]>(
+        "vscode.executeFormatDocumentProvider",
+        document.uri,
+        getFormattingOptions(document)
       );
 
-      const document = await vscode.workspace.openTextDocument(uri);
-      await vscode.window.showTextDocument(document, {
-        preview: true,
-        preserveFocus: true,
-      });
-
-      await vscode.commands.executeCommand("editor.action.formatDocument");
-      await document.save();
-
-      if (!previouslyVisible) {
-        await vscode.commands.executeCommand(
-          "workbench.action.closeActiveEditor"
-        );
+      if (edits && edits.length > 0) {
+        const workspaceEdit = new vscode.WorkspaceEdit();
+        workspaceEdit.set(document.uri, edits);
+        await vscode.workspace.applyEdit(workspaceEdit);
+        await document.save();
       }
     } catch (e) {
       console.error(`Auto-format failed for ${uri.fsPath}:`, e);
