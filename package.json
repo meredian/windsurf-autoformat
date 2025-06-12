@@ -3,13 +3,19 @@
   "displayName": "windsurf-autoformat",
   "description": "Runs Format + Save after file edits (Works for AI agent as well)",
   "version": "0.0.1",
+  "publisher": "meredian",
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": "^1.99.0"
   },
+  "license": "MIT",
   "categories": [
     "Formatters",
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meredian/windsurf-autoformat.git"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -31,7 +37,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
+    "@types/vscode": "^1.99.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
