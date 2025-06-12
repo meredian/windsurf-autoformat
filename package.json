@@ -1,7 +1,7 @@
 {
   "name": "windsurf-autoformat",
   "displayName": "windsurf-autoformat",
-  "description": "Runs Format + Save after AI edits",
+  "description": "Runs Format + Save after file edits (Works for AI agent as well)",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.100.0"

@@ -1,71 +1,37 @@
-# windsurf-autoformat README
+# Windsurf Auto-Format
 
-This is the README for your extension "windsurf-autoformat". After writing up a brief description, we recommend including the following sections.
+This extension automatically formats and saves files that are created or modified by external tools, such as AI agents.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This extension monitors the workspace for file changes. When a change is detected from an external source, it automatically performs the following actions:
 
-For example if there is an image subfolder under your extension project workspace:
+*   **Formats the document**: Uses the default formatter configured for the file type in your workspace.
+*   **Saves the document**: Persists the formatted changes to disk.
 
-\!\[feature X\]\(images/feature-x.png\)
+This ensures that code generated or modified by tools adheres to your project's coding standards without any manual intervention.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## How it Works
+
+The extension uses a `FileSystemWatcher` to listen for file system events. To avoid infinite loops (format -> save -> trigger change -> format), it keeps track of files it is currently processing and ignores subsequent change events for those files until the format/save operation is complete.
+
+It also intelligently handles editor visibility:
+*   If a file is modified, it is formatted in the background.
+*   If the file was not already open in an editor, it will be briefly opened in preview mode for formatting and then closed automatically, leaving your editor layout undisturbed.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+There are no external requirements. The extension uses the formatters already configured in your VS Code workspace.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+There are no known issues at this time.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+Initial release.
+*   Added automatic formatting and saving for newly created and modified files.
+*   Includes a robust test suite to ensure reliability.
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
